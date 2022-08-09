@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
