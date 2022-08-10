@@ -8,10 +8,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "userspring")
-//@Data
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
     private static final long serialVersionUID = -297553281792804396L;
 
@@ -29,47 +34,5 @@ public class User implements Serializable {
 	// Nếu không đánh dấu @Column thì sẽ mapping tự động theo tên biến
     private int atk = 100;
     private int def = 100;
-    private int agi = 100;
-
-      
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public int getHp() {
-		return hp;
-	}
-	public void setHp(int hp) {
-		this.hp = hp;
-	}
-	public int getStamina() {
-		return stamina;
-	}
-	public void setStamina(int stamina) {
-		this.stamina = stamina;
-	}
-	public int getAtk() {
-		return atk;
-	}
-	public void setAtk(int atk) {
-		this.atk = atk;
-	}
-	public int getDef() {
-		return def;
-	}
-	public void setDef(int def) {
-		this.def = def;
-	}
-	public int getAgi() {
-		return agi;
-	}
-	public void setAgi(int agi) {
-		this.agi = agi;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-    
+    private int agi = 100;    
 }

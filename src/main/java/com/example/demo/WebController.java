@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
+import com.example.demo.response.ResponseHandler;
 import com.example.demo.service.UserService;
 
 @RestController
@@ -23,7 +24,9 @@ public class WebController {
 
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private ResponseHandler responseHandler;
+	
 	@GetMapping("/")
 	public String index() {
 		return "index.html";
@@ -48,22 +51,22 @@ public class WebController {
 
 	@GetMapping("/v0/all")
 	public ResponseEntity<Object> getAllUser() {
-		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+		return responseHandler.createdSuccessResponse(userService.getAllUser(), 0);
 	}
 
 	@PostMapping("/v0/new")
 	public ResponseEntity<Object> createdNewUser(@RequestBody User user) {
-		User newUser = userService.createdNewUser(user);
-		return new ResponseEntity<>(newUser, HttpStatus.OK);
+		return responseHandler.createdSuccessResponse(userService.createdNewUser(user), 0);
+
 	}
 
 	@GetMapping("/v0/{id}")
 	public ResponseEntity<Object> getUserById(@PathVariable(value = "id") Integer id) {
 		User currentUser = userService.getUserById(id);
 		if (currentUser != null)
-			return new ResponseEntity<>(currentUser, HttpStatus.OK);
+			return responseHandler.createdSuccessResponse(currentUser, 0);
 		else
-			return new ResponseEntity<>("Not Exist", HttpStatus.BAD_REQUEST);
+			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
 	}
 
 	/*
@@ -74,18 +77,18 @@ public class WebController {
 	public ResponseEntity<Object> editUser(@PathVariable(name = "id") Integer id, @RequestBody User user) {
 		User currentUser = userService.getUserById(id);
 		if (currentUser == null)
-			return new ResponseEntity<>("Not Exist", HttpStatus.BAD_REQUEST);
+			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
 		int newData = userService.editUser(id, user);
-		return new ResponseEntity<>(newData, HttpStatus.OK);
+		return responseHandler.createdSuccessResponse(newData, 0);
 	}
 
 	@DeleteMapping("/v0/{id}")
 	public ResponseEntity<Object> removeUser(@PathVariable(name = "id") Integer id) {
 		User currentUser = userService.getUserById(id);
 		if (currentUser == null)
-			return new ResponseEntity<>("Not Exist", HttpStatus.BAD_REQUEST);
+			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
 		userService.removeUser(id);
-		return new ResponseEntity<>("Success" ,HttpStatus.OK);
+		return responseHandler.createdSuccessResponse("Success", 0);
 	}
 
 }
