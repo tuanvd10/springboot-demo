@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.MyCustomException;
+import com.example.demo.exception.MyUserException;
 import com.example.demo.response.ResponseHandler;
 import com.example.demo.service.UserService;
 
@@ -42,10 +43,9 @@ public class WebController {
 			// Request param "name" sẽ được gán giá trị vào biến String
 			@RequestParam(name = "name", required = false, defaultValue = "") String name,
 			// Model là một object của Spring Boot, được gắn vào trong mọi request.
-			Model model) {
+			Model model) throws Exception {
 		// Gắn vào model giá trị name nhận được
 		model.addAttribute("name", name);
-
 		return "hello"; // trả về file hello.html cùng với thông tin trong object Model
 	}
 
@@ -61,12 +61,12 @@ public class WebController {
 	}
 
 	@GetMapping("/v0/{id}")
-	public ResponseEntity<Object> getUserById(@PathVariable(value = "id") Integer id) {
+	public ResponseEntity<Object> getUserById(@PathVariable(value = "id") Integer id) throws MyCustomException {
 		User currentUser = userService.getUserById(id);
 		if (currentUser != null)
 			return responseHandler.createdSuccessResponse(currentUser, 0);
 		else
-			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
+			throw MyUserException.NOT_EXIST.getException();
 	}
 
 	/*
@@ -74,19 +74,19 @@ public class WebController {
 	 * thành đối tượng Todo
 	 */
 	@PutMapping("/v0/{id}")
-	public ResponseEntity<Object> editUser(@PathVariable(name = "id") Integer id, @RequestBody User user) {
+	public ResponseEntity<Object> editUser(@PathVariable(name = "id") Integer id, @RequestBody User user) throws MyCustomException {
 		User currentUser = userService.getUserById(id);
 		if (currentUser == null)
-			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
+			throw MyUserException.NOT_EXIST.getException();
 		int newData = userService.editUser(id, user);
 		return responseHandler.createdSuccessResponse(newData, 0);
 	}
 
 	@DeleteMapping("/v0/{id}")
-	public ResponseEntity<Object> removeUser(@PathVariable(name = "id") Integer id) {
+	public ResponseEntity<Object> removeUser(@PathVariable(name = "id") Integer id) throws MyCustomException {
 		User currentUser = userService.getUserById(id);
 		if (currentUser == null)
-			return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 111, "Not exist");
+			throw MyUserException.NOT_EXIST.getException();
 		userService.removeUser(id);
 		return responseHandler.createdSuccessResponse("Success", 0);
 	}
