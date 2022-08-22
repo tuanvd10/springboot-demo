@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.example.demo.response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.demo.response.ResponseHandler;
+import com.example.demo.exception.MyCustomException;
 
 @RestControllerAdvice
 public class ApiExeptionHandler {

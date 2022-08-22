@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,29 +19,22 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "account")
+@Table(name = "account_session")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+public class AccountSession implements Serializable {
 	private static final long serialVersionUID = -297553281792804396L;
-	public final static AccountRole DEFAULT_ROLE = new AccountRole(1);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// Mapping thông tin biến với tên cột trong Database
-	@Column(name = "login_name", unique = true)
-	private String loginName;
-	@Column(name = "password")
-	private String password;
+	@Column(name = "access_token")
+	private String accessToken;
 
-	@Column(name = "email")
-	private String email;
-
-	@ManyToOne(fetch = FetchType.EAGER) // Đánh dấu có mỗi quan hệ 1-1 với role ở phía dưới
-	@JoinColumn(name = "role_id", columnDefinition = "int default 1") // Liên kết với nhau qua khóa ngoại
-	private AccountRole role = DEFAULT_ROLE;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Đánh dấu có mỗi quan hệ 1-1 với role ở phía dưới
+	@JoinColumn(name = "account_id") // Liên kết với nhau qua khóa ngoại
+	private User user;
 
 	// Nếu không đánh dấu @Column thì sẽ mapping tự động theo tên biến
 	@Column(name = "created_time")

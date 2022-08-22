@@ -47,6 +47,7 @@ public abstract class DataSourceConfig implements InitializingBean {
 		// set up properties
 		HashMap<String, Object> properties = new HashMap<>();
 		properties.put("hibernate.dialect", this.getDialect()); // must have
+		properties.put("hibernate.hbm2ddl.auto", this.getDdlauto());
 		em.setJpaPropertyMap(properties);
 
 		return em;

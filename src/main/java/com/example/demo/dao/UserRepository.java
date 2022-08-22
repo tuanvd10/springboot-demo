@@ -13,6 +13,12 @@ import jakarta.transaction.Transactional;
 public interface UserRepository extends JpaRepository<User, Long> {
 	@Transactional
 	@Modifying
-	@Query("update User set stamina = ?2 where id = ?1")
-	int editUserQuery(int id, int stamina);
+	@Query("update User set password = ?2 where id = ?1")
+	int editUserQuery(int id, String password);
+
+	@Query("select user from User user where loginName = ?1")
+	User getUserByLoginName(String loginName);
+
+	@Query("select user from User user where loginName = ?1 and password = ?2")
+	User getUserByLoginNameAndPassword(String loginName, String password);
 }

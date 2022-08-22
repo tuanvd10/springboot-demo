@@ -17,16 +17,12 @@ public class UserService {
 		return userRepo.findAll();
 	}
 
-	public User createdNewUser(User user) {
-		return userRepo.save(user);
-	}
-
 	public User getUserById(long id) {
 		return userRepo.findById(id).orElse(null);
 	}
 
 	public int editUser(int id, User newUser) {
-		int data = this.userRepo.editUserQuery(id, newUser.getStamina());
+		int data = this.userRepo.editUserQuery(id, newUser.getPassword());
 		return data;
 	}
 
