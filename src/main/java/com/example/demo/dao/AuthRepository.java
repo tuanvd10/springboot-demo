@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.AccountSession;
 
 @Repository
-public interface AuthRepository extends JpaRepository<AccountSession, Long> {
+public interface AuthRepository extends JpaRepository<AccountSession, Long>, AuthRepositoryCustom {
 
 }

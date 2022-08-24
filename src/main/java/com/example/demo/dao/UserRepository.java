@@ -10,8 +10,8 @@ import com.example.demo.entity.User;
 import jakarta.transaction.Transactional;
 
 @Repository
+@Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
-	@Transactional
 	@Modifying
 	@Query("update User set password = ?2 where id = ?1")
 	int editUserQuery(int id, String password);

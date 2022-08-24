@@ -31,10 +31,12 @@ public class DemoApplicationConfig implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("DemoApplicationConfig bean created: " + this.getUsername() + this.getAge()
-				+ env.getProperty("test.scores") + env.getProperty("server.port"));
-
-		dataSourceConfig.setup();
-		System.out.println(dataSourceConfig.toString());
+		/*
+		 * System.out.println("DemoApplicationConfig bean created: " +
+		 * this.getUsername() + this.getAge() + env.getProperty("test.scores") +
+		 * env.getProperty("server.port"));
+		 * 
+		 * dataSourceConfig.setup(); System.out.println(dataSourceConfig.toString());
+		 */
 	}
 }

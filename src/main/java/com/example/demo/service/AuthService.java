@@ -41,6 +41,7 @@ public class AuthService {
 			accountSesion.setAccessToken(accessToken);
 			accountSesion.setUser(currentUser);
 			authRepo.save(accountSesion);
+			// authRepo.findAccountSesionByToken(accessToken);
 			return new AuthDto(accessToken, currentUser.getId(), currentUser.getRole().getId());
 		} else
 			throw AuthException.PARAM_WRONG.getException();

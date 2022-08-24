@@ -67,7 +67,23 @@
 		    <artifactId>jjwt-api</artifactId>
 		    <version>0.11.5</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen -->
+		<dependency>
+		    <groupId>org.hibernate.orm</groupId>
+		    <artifactId>hibernate-jpamodelgen</artifactId>
+		    <optional>true</optional>
+		</dependency>
+		<dependency>
+		  <groupId>jakarta.xml.bind</groupId>
+		  <artifactId>jakarta.xml.bind-api</artifactId>
+		  <version>4.0.0</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.sun.xml.bind</groupId>
+		  <artifactId>jaxb-impl</artifactId>
+		  <version>4.0.0</version>
+		  <scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -84,6 +100,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 	<repositories>
