@@ -1,13 +1,17 @@
 package com.example.demo.dto;
 
+import com.example.demo.customannotation.PhonenumberType;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
 	private long id;
@@ -30,14 +34,6 @@ public class UserDto {
 	@Size(min = 8, message = "password should have at least 8 characters")
 	private String password;
 
-	public UserDto() {
-
-	}
-
-	public UserDto(String loginName, String email, String password) {
-		super();
-		this.loginName = loginName;
-		this.email = email;
-		this.password = password;
-	}
+	@PhonenumberType
+	private String phoneNumber;
 }

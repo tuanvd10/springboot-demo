@@ -28,8 +28,9 @@ public class SystemExceptionHandler {
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<Object> handleAMethodArgumentNotValidExceptionException(BindException ex) {
-		System.out.println("BindException: " + ex.getBindingResult().getFieldErrorCount());
+		System.out.println("BindException: " + ex.getAllErrors().get(0).getDefaultMessage());
 		// ex.printStackTrace();
-		return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 101, "Data not valid");
+		return responseHandler.createdFailedResponse(HttpStatus.BAD_REQUEST, 101,
+				ex.getAllErrors().get(0).getDefaultMessage());
 	}
 }

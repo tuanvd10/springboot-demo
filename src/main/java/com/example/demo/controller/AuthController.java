@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 @RequestMapping("api/auth")
 public class AuthController {
 	@Autowired
-	private AuthService authService;
+	private AuthService authService; // only 1 object
 	@Autowired
 	private ResponseHandler responseHandler;
 
@@ -29,7 +29,7 @@ public class AuthController {
 	public ResponseEntity<Object> registerNewAccount(@Valid @RequestBody UserDto userDto)
 			throws MethodArgumentNotValidException, MyCustomException {
 
-		if (userDto.getEmail().isEmpty()) {
+		if (userDto.getEmail().isEmpty() || userDto.getPhoneNumber().isEmpty()) {
 			throw new MethodArgumentNotValidException(null, null);
 		}
 
