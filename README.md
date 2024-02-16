@@ -21,4 +21,5 @@ The following guides illustrate how to use some features concretely:
 
 # springboot-demo
 learning spring boot
-This is my practice via tutorial (https://loda.school/courses/lam-chu-spring-boot-zero-to-hero)
+This is my practice via tutorial (https://loda.me/courses/spring-boot)
+github repo of tutorial: https://github.com/loda-kun/spring-boot-learning 
