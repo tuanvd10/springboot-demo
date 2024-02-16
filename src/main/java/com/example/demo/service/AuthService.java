@@ -1,6 +1,10 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.AuthRepository;
@@ -11,6 +15,8 @@ import com.example.demo.entity.AccountSession;
 import com.example.demo.entity.User;
 import com.example.demo.exception.AuthException;
 import com.example.demo.exception.MyCustomException;
+import com.example.demo.jwtsecure.CustomUserDetails;
+import com.example.demo.jwtsecure.JwtTokenProvider;
 
 @Service
 public class AuthService {
@@ -20,6 +26,11 @@ public class AuthService {
 
 	@Autowired
 	private AuthRepository authRepo;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+	@Autowired
+	private JwtTokenProvider tokenProvider;
 
 	public User getUserByLoginName(String loginName) {
 		return userRepo.getUserByLoginName(loginName);
@@ -36,7 +47,18 @@ public class AuthService {
 	public Object login(UserDto userDto) throws MyCustomException {
 		User currentUser = userRepo.getUserByLoginNameAndPassword(userDto.getLoginName(), userDto.getPassword());
 		if (currentUser != null) {
-			String accessToken = "thisisaccesstoken";
+			// Xác thực từ username và password.
+
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(userDto.getLoginName(), userDto.getPassword()));
+
+			// Nếu không xảy ra exception tức là thông tin hợp lệ
+			// Set thông tin authentication vào Security Context
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			// Trả về jwt cho người dùng.
+			String accessToken = tokenProvider.generateToken(new CustomUserDetails(currentUser));
+
 			AccountSession accountSesion = new AccountSession();
 			accountSesion.setAccessToken(accessToken);
 			accountSesion.setUser(currentUser);

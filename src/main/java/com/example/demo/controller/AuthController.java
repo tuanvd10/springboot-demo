@@ -47,6 +47,7 @@ public class AuthController {
 		if (userDto.getPassword().isEmpty() || userDto.getLoginName().isEmpty()) {
 			throw new MethodArgumentNotValidException(null, null);
 		}
+
 		return responseHandler.createdSuccessResponse(authService.login(userDto), 0);
 	}
 

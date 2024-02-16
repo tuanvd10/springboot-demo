@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/v0/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<Object> removeUser(@PathVariable(name = "id") Integer id) throws MyCustomException {
 		User currentUser = userService.getUserById(id);
 		if (currentUser == null)
