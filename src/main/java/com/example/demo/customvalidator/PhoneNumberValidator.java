@@ -17,7 +17,7 @@ public class PhoneNumberValidator implements ConstraintValidator<PhonenumberType
 		System.out.printf("PhoneNumberValidator: %s", value);
 		if (value == null || value.isEmpty())
 			return true;
-		Matcher m = PHONENUMBER_REGEX.matcher(value);
+		Matcher m = PHONENUMBER_REGEX.matcher(value.trim());
 		return m.matches();
 	}
 }

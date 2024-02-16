@@ -76,13 +76,21 @@
 		<dependency>
 		  <groupId>jakarta.xml.bind</groupId>
 		  <artifactId>jakarta.xml.bind-api</artifactId>
-		  <version>4.0.0</version>
-		</dependency>
+		  </dependency>
 		<dependency>
 		  <groupId>com.sun.xml.bind</groupId>
 		  <artifactId>jaxb-impl</artifactId>
 		  <version>4.0.0</version>
 		  <scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
