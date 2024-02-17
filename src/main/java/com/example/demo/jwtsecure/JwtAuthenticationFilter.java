@@ -32,11 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		if (isByPassRequest(request)) {
-			System.err.printf("url by pass: %s \n", request.getServletPath());
-			filterChain.doFilter(request, response);
-			return;
-		}
+
 		try {
 			// Lấy jwt từ request
 			String jwt = getJwtFromRequest(request);
@@ -57,16 +53,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 			}
+			filterChain.doFilter(request, response);
 		} catch (Exception ex) {
 			System.err.println("failed on set user authentication");
 			ex.printStackTrace();
+//			response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "Error");
+			throw ex;
 		}
-		filterChain.doFilter(request, response);
-	}
-
-	private boolean isByPassRequest(HttpServletRequest request) {
-		final List<Pair<String, String>> listByPassRequest = Arrays.asList(Pair.of("", ""));
-		return false;
 	}
 
 	private String getJwtFromRequest(HttpServletRequest request) {

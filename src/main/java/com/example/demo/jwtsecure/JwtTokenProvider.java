@@ -3,6 +3,7 @@ package com.example.demo.jwtsecure;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 
 import javax.naming.MalformedLinkException;
 
@@ -44,22 +45,39 @@ public class JwtTokenProvider {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
+	private Boolean isTokenExpired(String token) {
+		return extractExpiration(token).before(new Date());
+	}
+
+	public Date extractExpiration(String token) {
+		return extractClaim(token, Claims::getExpiration);
+	}
+
+	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+		final Claims claims = extractAllClaims(token);
+		return claimsResolver.apply(claims);
+	}
+
+	private Claims extractAllClaims(String token) {
+		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+	}
+
 	public boolean validateToken(String token) {
-		try {
-			Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
-			return true;
-		} catch (MalformedJwtException ex) {
-			System.err.println("Invalid JWT token");
-		} catch (ExpiredJwtException ex) {
-			System.err.println("Expired JWT token");
-		} catch (UnsupportedJwtException ex) {
-			System.err.println("Unsupported JWT token");
-		} catch (IllegalArgumentException ex) {
-			System.err.println("JWT claims string is empty.");
-		} catch (SignatureException ex) {
-			System.err.println("JWT cannot be trust.");
-		}
-		return false;
+//		try {
+		// Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+		return isTokenExpired(token);
+//		} catch (MalformedJwtException ex) {
+//			System.err.println("Invalid JWT token");
+//		} catch (ExpiredJwtException ex) {
+//			System.err.println("Expired JWT token");
+//		} catch (UnsupportedJwtException ex) {
+//			System.err.println("Unsupported JWT token");
+//		} catch (IllegalArgumentException ex) {
+//			System.err.println("JWT claims string is empty.");
+//		} catch (SignatureException ex) {
+//			System.err.println("JWT cannot be trust.");
+//		}
+//		return false;
 	}
 
 }

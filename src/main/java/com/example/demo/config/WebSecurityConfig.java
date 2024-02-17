@@ -1,20 +1,20 @@
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,6 +26,10 @@ public class WebSecurityConfig {
 	private JwtAuthenticationFilter authFilter;
 	@Autowired
 	private UserDetailsService userDetailService;
+
+    @Autowired
+    @Qualifier("delegatedAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint; //entry point fot authenticate exception handler
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -51,13 +55,15 @@ public class WebSecurityConfig {
 					auth.requestMatchers("/img/**").permitAll();
 					auth.requestMatchers(HttpMethod.GET, "/hello").permitAll(); // not match
 					auth.requestMatchers(HttpMethod.GET, "/hello.html").permitAll(); // not match
-					auth.requestMatchers(HttpMethod.GET, "/about").permitAll();// not match
+					auth.requestMatchers(HttpMethod.GET, "/about").permitAll();// ok with @ResponBody => not work if
+																				// return file...
 					auth.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll();// not match
 					auth.requestMatchers("/api/user/v0/all").hasRole("ADMIN");
 					auth.requestMatchers("/api/**").authenticated();
-				}).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-				//.httpBasic(Customizer.withDefaults()).authenticationProvider(authenticationProvider());
-		
+				}).exceptionHandling().authenticationEntryPoint(authEntryPoint);
+//				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		// .httpBasic(Customizer.withDefaults()).authenticationProvider(authenticationProvider());
+
 		// http.addFilterAfter(authFilter, null); filter after handle
 		return http.build();
 	}
