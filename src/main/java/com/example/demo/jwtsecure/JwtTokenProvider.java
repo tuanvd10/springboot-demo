@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import javax.naming.MalformedLinkException;
+
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -13,6 +15,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtTokenProvider {
@@ -53,6 +56,8 @@ public class JwtTokenProvider {
 			System.err.println("Unsupported JWT token");
 		} catch (IllegalArgumentException ex) {
 			System.err.println("JWT claims string is empty.");
+		} catch (SignatureException ex) {
+			System.err.println("JWT cannot be trust.");
 		}
 		return false;
 	}

@@ -36,6 +36,7 @@ public class UserController {
 	@GetMapping("/v0/{id}")
 	@ResponseBody
 	public ResponseEntity<Object> getUserById(@PathVariable(value = "id") Integer id) throws MyCustomException {
+		System.out.println("Jump to controller");
 		User currentUser = userService.getUserById(id);
 		if (currentUser != null)
 			return responseHandler.createdSuccessResponse(currentUser, 0);

@@ -3,6 +3,7 @@ package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,16 +41,24 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		System.err.printf("filter chain \n");
 		http.csrf(csrf -> {
 			csrf.disable();
-		}).cors(cors -> cors.disable()).authorizeHttpRequests(auth -> {
-			auth.requestMatchers("/api/auth/v0/login").permitAll();
-			auth.requestMatchers("/api/auth/v0/register").permitAll();
-			auth.anyRequest().authenticated();
-		}).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.httpBasic(Customizer.withDefaults()).authenticationProvider(authenticationProvider())
-				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-
+		}).cors(cors -> cors.disable()).addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+				.authorizeHttpRequests(auth -> {
+					auth.requestMatchers("/api/auth/v0/login").permitAll();
+					auth.requestMatchers("/api/auth/v0/register").permitAll();
+					auth.requestMatchers("/img/**").permitAll();
+					auth.requestMatchers(HttpMethod.GET, "/hello").permitAll(); // not match
+					auth.requestMatchers(HttpMethod.GET, "/hello.html").permitAll(); // not match
+					auth.requestMatchers(HttpMethod.GET, "/about").permitAll();// not match
+					auth.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll();// not match
+					auth.requestMatchers("/api/user/v0/all").hasRole("ADMIN");
+					auth.requestMatchers("/api/**").authenticated();
+				}).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+				//.httpBasic(Customizer.withDefaults()).authenticationProvider(authenticationProvider());
+		
+		// http.addFilterAfter(authFilter, null); filter after handle
 		return http.build();
 	}
 
@@ -60,11 +69,4 @@ public class WebSecurityConfig {
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
 		return authenticationProvider;
 	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return web -> web.ignoring().requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico",
-				"/hello", "/index.html", "about");
-	}
-
 }

@@ -27,6 +27,7 @@ public class WebController {
 			// Model là một object của Spring Boot, được gắn vào trong mọi request.
 			Model model) throws Exception {
 		// Gắn vào model giá trị name nhận được
+		System.err.println("Hello");
 		model.addAttribute("name", name);
 		return "hello"; // trả về file hello.html cùng với thông tin trong object Model
 	}
