@@ -52,6 +52,7 @@ public class UserService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException(userId.toString());
 		}
+		user.setPassword(null); //hide user password
 		return new CustomUserDetails(user);
 	}
 }

@@ -59,6 +59,7 @@ public class WebSecurityConfig {
 																				// return file...
 					auth.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll();// not match
 					auth.requestMatchers("/api/user/v0/all").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.DELETE, "/api/user/v0/*").hasRole("ADMIN");
 					auth.requestMatchers("/api/**").authenticated();
 				}).exceptionHandling().authenticationEntryPoint(authEntryPoint);
 //				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

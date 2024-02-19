@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 	User user;
-
+	String appEdition = "OH"; //additional data if want save to context
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// get role of user and add prefix ROLE
@@ -55,5 +55,9 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public CustomUserDetails(User user) {
+		this.user = user;
 	}
 }
